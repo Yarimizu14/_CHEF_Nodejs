@@ -18,6 +18,7 @@ Vagrant.configure(2) do |config|
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
   # config.vm.box_check_update = false
+  config.omnibus.chef_version = :latest
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -68,4 +69,11 @@ Vagrant.configure(2) do |config|
   #   sudo apt-get update
   #   sudo apt-get install -y apache2
   # SHELL
+
+  config.vm.provision "chef_solo" do |chef|
+    chef.cookbooks_path = ["./chef-repo/cookbooks", "./chef-repo/site-cookbooks"]
+    #chef.custom_config_path = "../Vagrantfile.chef"
+    chef.add_recipe "yum-epel"
+    chef.add_recipe "nginx"
+  end
 end
